@@ -1,16 +1,6 @@
 package main
 
 import (
-	"fmt"
-	"testing"
-	"time"
-
-	"github.com/MS-32154/pokedexcli/internal/pokecache"
-)
-
-package main
-
-import (
 	"testing"
 )
 
