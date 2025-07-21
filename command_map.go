@@ -1,41 +1,40 @@
 package main
 
 import (
+	"errors"
 	"fmt"
-
-	"github.com/MS-32154/pokeapi"
 )
 
-func commandMap(config *Config) error {
-	url := config.Next
-	areas, next, previous, err := pokeapi.GetLocationAreas(url)
+func commandMapf(cfg *config) error {
+	locationsResp, err := cfg.pokeapiClient.ListLocations(cfg.nextLocationsURL)
 	if err != nil {
 		return err
 	}
-	for _, area := range areas {
-		fmt.Printf("%s\n", area.Name)
+
+	cfg.nextLocationsURL = locationsResp.Next
+	cfg.prevLocationsURL = locationsResp.Previous
+
+	for _, loc := range locationsResp.Results {
+		fmt.Println(loc.Name)
 	}
-
-	config.Next = next
-
-	config.Previous = previous
-
 	return nil
 }
 
-func commandMapb(config *Config) error {
-	url := config.Previous
-	areas, next, previous, err := pokeapi.GetLocationAreas(url)
+func commandMapb(cfg *config) error {
+	if cfg.prevLocationsURL == nil {
+		return errors.New("you're on the first page")
+	}
+
+	locationResp, err := cfg.pokeapiClient.ListLocations(cfg.prevLocationsURL)
 	if err != nil {
 		return err
 	}
-	for _, area := range areas {
-		fmt.Printf("%s\n", area.Name)
+
+	cfg.nextLocationsURL = locationResp.Next
+	cfg.prevLocationsURL = locationResp.Previous
+
+	for _, loc := range locationResp.Results {
+		fmt.Println(loc.Name)
 	}
-
-	config.Next = next
-
-	config.Previous = previous
-
 	return nil
 }
