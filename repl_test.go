@@ -1,6 +1,18 @@
 package main
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+	"time"
+
+	"github.com/MS-32154/pokedexcli/internal/pokecache"
+)
+
+package main
+
+import (
+	"testing"
+)
 
 func TestCleanInput(t *testing.T) {
 	cases := []struct {
@@ -12,15 +24,15 @@ func TestCleanInput(t *testing.T) {
 			expected: []string{},
 		},
 		{
+			input:    "  hello  ",
+			expected: []string{"hello"},
+		},
+		{
 			input:    "  hello  world  ",
 			expected: []string{"hello", "world"},
 		},
 		{
-			input:    "hello  world!  \n",
-			expected: []string{"hello", "world!"},
-		},
-		{
-			input:    "\n  hello\n  world  ",
+			input:    "  HellO  World  ",
 			expected: []string{"hello", "world"},
 		},
 	}
@@ -28,13 +40,14 @@ func TestCleanInput(t *testing.T) {
 	for _, c := range cases {
 		actual := cleanInput(c.input)
 		if len(actual) != len(c.expected) {
-			t.Errorf("length of actual slice doesn't match length of expected slice: %v <> %v", len(actual), len(c.expected))
+			t.Errorf("lengths don't match: '%v' vs '%v'", actual, c.expected)
+			continue
 		}
 		for i := range actual {
 			word := actual[i]
 			expectedWord := c.expected[i]
 			if word != expectedWord {
-				t.Errorf("actual word doesn't match expected word at index %v: %v <> %v", i, word, expectedWord)
+				t.Errorf("cleanInput(%v) == %v, expected %v", c.input, actual, c.expected)
 			}
 		}
 	}

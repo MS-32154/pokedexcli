@@ -7,12 +7,14 @@ import (
 	"strings"
 
 	"github.com/MS-32154/pokedexcli/internal/pokeapi"
+	"github.com/MS-32154/pokedexcli/internal/pokecache"
 )
 
 type config struct {
 	pokeapiClient    pokeapi.Client
 	nextLocationsURL *string
 	prevLocationsURL *string
+	cache            pokecache.Cache
 }
 
 func startRepl(cfg *config) {

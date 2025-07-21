@@ -6,6 +6,16 @@ import (
 )
 
 func commandMapf(cfg *config) error {
+	if cfg.nextLocationsURL != nil {
+		v, exists := cfg.cache.Get(*cfg.nextLocationsURL)
+		if exists {
+			for _, loc := range v {
+				fmt.Println(loc)
+			}
+			return nil
+		}
+	}
+
 	locationsResp, err := cfg.pokeapiClient.ListLocations(cfg.nextLocationsURL)
 	if err != nil {
 		return err
@@ -21,6 +31,16 @@ func commandMapf(cfg *config) error {
 }
 
 func commandMapb(cfg *config) error {
+	if cfg.prevLocationsURL != nil {
+		v, exists := cfg.cache.Get(*cfg.prevLocationsURL)
+		if exists {
+			for _, loc := range v {
+				fmt.Println(loc)
+			}
+			return nil
+		}
+	}
+
 	if cfg.prevLocationsURL == nil {
 		return errors.New("you're on the first page")
 	}
