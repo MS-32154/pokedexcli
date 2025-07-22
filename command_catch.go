@@ -16,19 +16,17 @@ func commandCatch(cfg *config, args ...string) error {
 	if err != nil {
 		return err
 	}
-	if _, ok := cfg.pokemon[pokemon.Name]; ok {
-		fmt.Printf("You already have %s...\n", pokemon.Name)
-		return nil
-	}
-	baseExp := pokemon.BaseExperience
+
+	res := rand.Intn(pokemon.BaseExperience)
 
 	fmt.Printf("Throwing a Pokeball at %s...\n", pokemon.Name)
-	randRes := rand.Intn(baseExp)
-	if randRes > baseExp/2 {
-		cfg.pokemon[pokemon.Name] = pokemon
-		fmt.Printf("%s was caught!\n", pokemon.Name)
-	} else {
+	if res > 40 {
 		fmt.Printf("%s escaped!\n", pokemon.Name)
+		return nil
 	}
+
+	fmt.Printf("%s was caught!\n", pokemon.Name)
+
+	cfg.caughtPokemon[pokemon.Name] = pokemon
 	return nil
 }
